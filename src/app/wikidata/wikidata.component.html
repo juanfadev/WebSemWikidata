@@ -1,0 +1,4 @@
+<div *ngFor="let e of entities">
+  <a [href]="'https://www.wikidata.org/wiki/'+e.item.value"><h1 [innerText]="e.item.label"></h1></a>
+  <app-entity [f]="e"></app-entity>
+</div>

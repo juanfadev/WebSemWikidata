@@ -1,0 +1,11 @@
+<div *ngIf="properties">
+  <ngx-json-ld [json]="schema"></ngx-json-ld>
+  <table>
+    <tr *ngFor="let p of properties">
+      <td><a [innerText]="p.propLabel" [href]="'https://www.wikidata.org/wiki/Property:'+p.propUrl"></a></td>
+      <td><a [innerText]="p.valLabel" [href]="'https://www.wikidata.org/wiki/'+p.valUrl"></a></td>
+      <td><a *ngIf="p.picture != null" [href]="p.picture"><img width="250" [src]="p.picture"/></a></td>
+    </tr>
+    <tr><td>JSON-LD</td><td><p [innerText]="schema | json"></p></td></tr>
+  </table>
+</div>
