@@ -1,0 +1,21 @@
+<p-chart type="line" [data]="data" [responsive]="true" [options]="options"
+         height="250"></p-chart>
+<p-table [value]="f">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Country</th>
+      <th>Companies</th>
+      <th>Startups</th>
+      <th>Ratio (Companies/Startup)</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-e>
+    <tr>
+      <td><p [innerText]="e.countryLabel"></p></td>
+      <td><p [innerText]="e.companies"></p></td>
+      <td><p [innerText]="e.startups"></p></td>
+      <td><p [innerText]="e.ratio"></p></td>
+    </tr>
+  </ng-template>
+</p-table>
+

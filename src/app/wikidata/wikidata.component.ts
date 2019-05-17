@@ -1,9 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import * as wdk from 'wikidata-sdk';
 import {HttpClient} from '@angular/common/http';
 import {Entity, SparqlResults, SparqlValueType} from 'wikidata-sdk';
 import {Dictionary} from 'wikidata-sdk/types/helper';
-import {WikidataProperty} from '../Property';
 
 
 @Component({
@@ -11,29 +10,38 @@ import {WikidataProperty} from '../Property';
   templateUrl: './wikidata.component.html',
   styleUrls: ['./wikidata.component.css']
 })
-export class WikidataComponent implements OnInit {
+export class WikidataComponent implements OnInit, OnChanges {
 
-  selectedEntityQid: number;
+  @Input() query: string;
   entities: Dictionary<SparqlValueType>[];
+  selectedEntitites: number[] = [];
+  chart: boolean;
 
   constructor(private http: HttpClient) {
   }
 
   ngOnInit() {
     const startupQid = 'Q129238';
-    const sparql = `
-      SELECT ?item ?itemLabel ?loc ?locLabel ?geo WHERE {
-        ?item wdt:P31 wd:${startupQid} .
-        OPTIONAL{?item      wdt:P159 ?loc .
-                ?loc wdt:P625 ?geo } .
-
-        SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],es,en". }
-      }
-      `;
-    const url = wdk.sparqlQuery(sparql);
+    const url = wdk.sparqlQuery(this.query);
+    this.chart = false;
 
     this.http.get<SparqlResults>(url).toPromise().then(r => wdk.simplify.sparqlResults(r)).then(res => {
       this.entities = res;
+      console.log(res);
+
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    const url = wdk.sparqlQuery(this.query);
+    this.entities = null;
+    this.http.get<SparqlResults>(url).toPromise().then(r => wdk.simplify.sparqlResults(r)).then(res => {
+      this.entities = res;
+      if (res[0].countryLabel != null) {
+        this.chart = true;
+      } else {
+        this.chart = false;
+      }
       console.log(res);
 
     });
@@ -62,5 +70,10 @@ export class WikidataComponent implements OnInit {
       console.log(a);
     });
   }
+
+  showEntity(i: number) {
+    this.selectedEntitites.push(i);
+  }
+
 
 }

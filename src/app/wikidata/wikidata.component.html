@@ -1,4 +1,15 @@
-<div *ngFor="let e of entities">
-  <a [href]="'https://www.wikidata.org/wiki/'+e.item.value"><h1 [innerText]="e.item.label"></h1></a>
-  <app-entity [f]="e"></app-entity>
+<p *ngIf="entities==null">Loading...</p>
+
+<p-accordion *ngIf="!chart">
+  <p-accordionTab *ngFor="let e of entities" header="{{e.item.label}}">
+    <a [href]="'https://www.wikidata.org/wiki/'+e.item.value"><h1 [innerText]="e.item.label"></h1></a>
+    <ng-template pTemplate="content">
+      <app-entity [f]="e"></app-entity>
+    </ng-template>
+  </p-accordionTab>
+</p-accordion>
+
+
+<div *ngIf="chart">
+  <app-ratio-country [f]="entities"></app-ratio-country>
 </div>

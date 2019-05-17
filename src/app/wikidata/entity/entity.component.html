@@ -1,11 +1,24 @@
 <div *ngIf="properties">
   <ngx-json-ld [json]="schema"></ngx-json-ld>
-  <table>
-    <tr *ngFor="let p of properties">
-      <td><a [innerText]="p.propLabel" [href]="'https://www.wikidata.org/wiki/Property:'+p.propUrl"></a></td>
-      <td><a [innerText]="p.valLabel" [href]="'https://www.wikidata.org/wiki/'+p.valUrl"></a></td>
-      <td><a *ngIf="p.picture != null" [href]="p.picture"><img width="250" [src]="p.picture"/></a></td>
-    </tr>
-    <tr><td>JSON-LD</td><td><p [innerText]="schema | json"></p></td></tr>
-  </table>
+  <p-table [value]="properties">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Property</th>
+        <th>Value</th>
+        <th>Picture</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-p>
+      <tr>
+        <td><a [innerText]="p.propLabel" [href]="'https://www.wikidata.org/wiki/Property:'+p.propUrl"></a></td>
+        <td><a [innerText]="p.valLabel" [href]="'https://www.wikidata.org/wiki/'+p.valUrl"></a></td>
+        <td><a *ngIf="p.picture != null" [href]="p.picture"><img width="250" [src]="p.picture"/></a></td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <h3>JSON-LD</h3>
+      <p [innerText]="schema | json"></p>
+
+    </ng-template>
+  </p-table>
 </div>
